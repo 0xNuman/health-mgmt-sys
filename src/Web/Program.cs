@@ -1,5 +1,6 @@
 using ReferenceData.Infrastructure;
 using Scheduling.Infrastructure;
+using Web.Middlewares;
 using Web.Modules;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,10 +12,15 @@ builder.Services
     .AddSchedulingApplication()
     .AddSchedulingInfrastructure(builder.Configuration);
 
+builder.Services.AddProblemDetails();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
+
+app.UseExceptionHandler();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
