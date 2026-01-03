@@ -1,4 +1,5 @@
 using Web.Endpoints;
+using Web.Endpoints.Admin;
 
 namespace Web.Modules;
 
@@ -10,6 +11,8 @@ public static class SchedulingEndpoints
         app.MapBookingEndpoints();
         app.MapCancellationEndpoints();
         app.MapBlockingEndpoints();
+
+        app.MapAdminAvailabilityExceptionEndpoints();
 
         return app;
     }

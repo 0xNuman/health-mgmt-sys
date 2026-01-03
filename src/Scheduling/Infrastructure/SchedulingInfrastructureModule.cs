@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Scheduling.Application.Ports;
+using Scheduling.Infrastructure.Repositories;
 
 namespace Scheduling.Infrastructure;
 
@@ -16,6 +17,7 @@ public static class SchedulingInfrastructureModule
         });
 
         services.AddScoped<ISlotRepository, SlotRepository>();
+        services.AddScoped<IAvailabilityExceptionRepository, AvailabilityExceptionRepository>();
 
         return services;
     }

@@ -3,6 +3,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ReferenceData.Application.Ports;
 using ReferenceData.Infrastructure.Repositories;
+using ReferenceData.Infrastructure.Services;
+using Scheduling.Application.Ports;
 
 namespace ReferenceData.Infrastructure;
 
@@ -21,6 +23,8 @@ public static class ReferenceDataInfrastructureModule
         services.AddScoped<IDoctorRepository, DoctorRepository>();
         services.AddScoped<IPatientRepository, PatientRepository>();
         services.AddScoped<IDoctorAvailabilityRepository, DoctorAvailabilityRepository>();
+
+        services.AddScoped<IDoctorExistenceChecker, DoctorExistenceChecker>();
 
         services.AddScoped<ReferenceDataSeeder>();
 

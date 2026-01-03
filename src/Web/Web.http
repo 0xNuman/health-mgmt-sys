@@ -1,5 +1,5 @@
 @Web_HostAddress = http://localhost:5128
-@doctorId = dbf10727-3202-49be-ac53-6c65a4496737
+@doctorId = 43de528c-ee5d-4211-a81b-55da13624228
 
 ### Get all doctors
 GET {{Web_HostAddress}}/api/admin/doctors
@@ -10,7 +10,7 @@ GET {{Web_HostAddress}}/api/admin/patients
 Accept: application/json
 
 ### Add doctor's availability
-PUT {{Web_HostAddress}}//api/admin/doctors/{{doctorId}}/availability
+PUT {{Web_HostAddress}}/api/admin/doctors/{{doctorId}}/availability
 Content-Type: application/json
 
 {
@@ -23,5 +23,33 @@ Content-Type: application/json
 }
 
 ### Get doctor's availability
-GET {{Web_HostAddress}}//api/admin/doctors/{{doctorId}}/availability
+GET {{Web_HostAddress}}/api/admin/doctors/{{doctorId}}/availability
+Accept: application/json
+
+### Create FULL-DAY block
+POST {{Web_HostAddress}}/api/admin/doctors/{{doctorId}}/availability-exceptions
+Content-Type: application/json
+
+{
+  "date": "2026-02-10",
+  "type": "FullDayBlock",
+  "startTime": null,
+  "endTime": null,
+  "reason": "Emergency leave"
+}
+
+### Create a PARTIAL-DAY exception
+POST {{Web_HostAddress}}/api/admin/doctors/{{doctorId}}/availability-exceptions
+Content-Type: application/json
+
+{
+  "date": "2026-02-11",
+  "type": "PartialDayBlock",
+  "startTime": "10:00",
+  "endTime": "13:00",
+  "reason": "Surgery"
+}
+
+### Fetch exceptions in a date range
+GET {{Web_HostAddress}}/api/admin/doctors/{{doctorId}}/availability-exceptions?from=2026-02-01&to=2026-02-28
 Accept: application/json

@@ -3,7 +3,7 @@ using Scheduling.Application.Exceptions;
 using Scheduling.Application.Ports;
 using Scheduling.Domain;
 
-namespace Scheduling.Infrastructure;
+namespace Scheduling.Infrastructure.Repositories;
 
 public sealed class SlotRepository(SchedulingDbContext db) : ISlotRepository
 {

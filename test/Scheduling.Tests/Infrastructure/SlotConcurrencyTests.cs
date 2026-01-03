@@ -6,6 +6,7 @@ using Scheduling.Application.Results;
 using Scheduling.Application.UseCases;
 using Scheduling.Domain;
 using Scheduling.Infrastructure;
+using Scheduling.Infrastructure.Repositories;
 
 namespace Scheduling.Tests.Infrastructure;
 
