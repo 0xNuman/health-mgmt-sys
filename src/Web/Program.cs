@@ -1,4 +1,5 @@
 using ReferenceData.Infrastructure;
+using Scalar.AspNetCore;
 using Scheduling.Infrastructure;
 using Web.Middlewares;
 using Web.Modules;
@@ -30,6 +31,14 @@ if (app.Environment.IsDevelopment())
     await scope.ServiceProvider.GetRequiredService<SchedulingDbContext>().Database.EnsureCreatedAsync();
 
     app.MapOpenApi();
+
+    app.MapScalarApiReference(options =>
+    {
+        options
+            .WithTitle("HMS API Reference")
+            .WithTheme(ScalarTheme.Moon)
+            .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient);
+    });
 }
 
 app.UseDefaultFiles();
