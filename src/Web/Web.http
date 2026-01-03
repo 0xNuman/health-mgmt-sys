@@ -1,4 +1,5 @@
 @Web_HostAddress = http://localhost:5128
+@doctorId = dbf10727-3202-49be-ac53-6c65a4496737
 
 ### Get all doctors
 GET {{Web_HostAddress}}/api/admin/doctors
@@ -6,4 +7,21 @@ Accept: application/json
 
 ### Get all patients
 GET {{Web_HostAddress}}/api/admin/patients
+Accept: application/json
+
+### Add doctor's availability
+PUT {{Web_HostAddress}}//api/admin/doctors/{{doctorId}}/availability
+Content-Type: application/json
+
+{
+  "workingDays": "Mon,Tue,Wed,Thu,Fri",
+  "dailyStartTime": "09:00",
+  "dailyEndTime": "17:00",
+  "slotDurationMinutes": 15,
+  "rollingWindowDays": 14,
+  "isActive": true
+}
+
+### Get doctor's availability
+GET {{Web_HostAddress}}//api/admin/doctors/{{doctorId}}/availability
 Accept: application/json

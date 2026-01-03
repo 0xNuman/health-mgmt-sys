@@ -20,6 +20,7 @@ public static class ReferenceDataInfrastructureModule
 
         services.AddScoped<IDoctorRepository, DoctorRepository>();
         services.AddScoped<IPatientRepository, PatientRepository>();
+        services.AddScoped<IDoctorAvailabilityRepository, DoctorAvailabilityRepository>();
 
         services.AddScoped<ReferenceDataSeeder>();
 

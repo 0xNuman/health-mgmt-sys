@@ -9,6 +9,7 @@ public static class ReferenceDataApplicationModule
     {
         services.AddScoped<CreateDoctor>();
         services.AddScoped<CreatePatient>();
+        services.AddScoped<SetDoctorAvailability>();
         return services;
     }
 }

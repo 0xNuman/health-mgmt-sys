@@ -9,6 +9,7 @@ public static class ReferenceDataEndpoints
     {
         app.MapAdminDoctorEndpoints();
         app.MapAdminPatientEndpoints();
+        app.MapAdminDoctorAvailabilityEndpoints();
         return app;
     }
 }
