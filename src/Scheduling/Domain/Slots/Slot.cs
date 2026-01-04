@@ -46,4 +46,20 @@ public sealed class Slot
         if (Status == SlotStatus.Blocked)
             Status = SlotStatus.Available;
     }
+
+    public void MarkAsBooked()
+    {
+        if (Status != SlotStatus.Available)
+            throw new InvalidOperationException($"Cannot book slot with status {Status}");
+
+        Status = SlotStatus.Booked;
+    }
+
+    public void MarkAsAvailable()
+    {
+        // When a booking is cancelled, the slot becomes available again
+        // We might want to check if it was previously Booked, but for now this is safe
+        if (Status == SlotStatus.Booked)
+            Status = SlotStatus.Available;
+    }
 }

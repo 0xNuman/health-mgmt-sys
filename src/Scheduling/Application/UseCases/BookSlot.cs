@@ -30,6 +30,8 @@ public sealed class BookSlot(ISlotRepository slots, IBookingRepository bookings)
 
         try
         {
+            slot.MarkAsBooked();
+            await slots.Update(slot);
             await bookings.Add(booking);
             return BookSlotResult.Ok(booking.Id);
         }

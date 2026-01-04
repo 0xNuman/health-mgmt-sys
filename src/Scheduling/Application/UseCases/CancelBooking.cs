@@ -1,10 +1,11 @@
 using Scheduling.Application.Commands;
 using Scheduling.Application.Ports;
 using Scheduling.Application.Results;
+using Scheduling.Domain.Slots;
 
 namespace Scheduling.Application.UseCases;
 
-public sealed class CancelBooking(IBookingRepository bookings)
+public sealed class CancelBooking(IBookingRepository bookings, ISlotRepository slots)
 {
     public async Task<Result> Execute(CancelBookingCommand command)
     {
@@ -18,6 +19,13 @@ public sealed class CancelBooking(IBookingRepository bookings)
         try
         {
             booking.Cancel();
+            
+            var slot = await slots.Get(booking.SlotId);
+            if (slot != null)
+            {
+                slot.MarkAsAvailable();
+                await slots.Update(slot);
+            }
         }
         catch (InvalidOperationException e)
         {
