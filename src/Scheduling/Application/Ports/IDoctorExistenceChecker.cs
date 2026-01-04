@@ -10,5 +10,5 @@ namespace Scheduling.Application.Ports;
 /// </summary>
 public interface IDoctorExistenceChecker
 {
-    Task<bool> Exists(Guid doctorId);
+    Task<bool> Exists(Guid doctorId, CancellationToken cancellationToken = default);
 }

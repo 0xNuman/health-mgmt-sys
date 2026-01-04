@@ -20,6 +20,7 @@ public static class SchedulingInfrastructureModule
         services.AddScoped<ISlotRepository, SlotRepository>();
         services.AddScoped<IAvailabilityExceptionRepository, AvailabilityExceptionRepository>();
         services.AddScoped<IBookingRepository, BookingRepository>();
+        services.AddScoped<IUnitOfWork, SchedulingUnitOfWork>();
 
         return services;
     }

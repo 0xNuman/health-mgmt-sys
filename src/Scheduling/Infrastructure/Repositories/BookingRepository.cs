@@ -8,56 +8,30 @@ namespace Scheduling.Infrastructure.Repositories;
 
 public sealed class BookingRepository(SchedulingDbContext db) : IBookingRepository
 {
-    public async Task Add(Booking booking)
+    public Task Add(Booking booking, CancellationToken cancellationToken = default)
     {
         db.Bookings.Add(booking);
-        try
-        {
-            await db.SaveChangesAsync();
-        }
-        catch (DbUpdateException e) when (IsUniqueConstraintViolation(e))
-        {
-            throw new SlotAlreadyBookedException();
-        }
+        return Task.CompletedTask;
     }
 
-    public async Task<Booking?> GetActiveBySlotId(Guid slotId) =>
+    public async Task<Booking?> GetActiveBySlotId(Guid slotId, CancellationToken cancellationToken = default) =>
         await db.Bookings
             .AsNoTracking()
-            .SingleOrDefaultAsync(b => b.SlotId == slotId && b.Status == BookingStatus.Active);
+            .SingleOrDefaultAsync(b => b.SlotId == slotId && b.Status == BookingStatus.Active, cancellationToken);
 
-    public async Task<Booking?> GetById(Guid bookingId)
-        => await db.Bookings.FindAsync(bookingId);
+    public async Task<Booking?> GetById(Guid bookingId, CancellationToken cancellationToken = default)
+        => await db.Bookings.FindAsync([bookingId], cancellationToken);
 
-    public async Task Update(Booking booking)
+    public Task Update(Booking booking, CancellationToken cancellationToken = default)
     {
         db.Bookings.Update(booking);
-        await db.SaveChangesAsync();
+        return Task.CompletedTask;
     }
 
-    public async Task<IReadOnlyList<Booking>> GetByPatientId(Guid patientId)
+    public async Task<IReadOnlyList<Booking>> GetByPatientId(Guid patientId, CancellationToken cancellationToken = default)
         => await db.Bookings
             .AsNoTracking()
             .Where(b => b.PatientId == patientId)
             .OrderByDescending(b => b.Status)
-            .ToListAsync();
-
-    private static bool IsUniqueConstraintViolation(DbUpdateException ex)
-    {
-        if (ex.InnerException is SqliteException sqliteEx)
-        {
-            // SQLite constraint violation error code
-            return sqliteEx.SqliteErrorCode == 19;
-        }
-
-        // SQL Server (future-proofing)
-        // if (ex.InnerException is SqlException sqlEx)
-        // {
-        //     // 2627 = Unique constraint
-        //     // 2601 = Duplicate key
-        //     return sqlEx.Number is 2627 or 2601;
-        // }
-
-        return false;
-    }
+            .ToListAsync(cancellationToken);
 }

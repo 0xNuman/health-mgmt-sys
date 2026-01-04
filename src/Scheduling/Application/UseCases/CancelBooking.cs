@@ -5,11 +5,14 @@ using Scheduling.Domain.Slots;
 
 namespace Scheduling.Application.UseCases;
 
-public sealed class CancelBooking(IBookingRepository bookings, ISlotRepository slots)
+public sealed class CancelBooking(
+    IBookingRepository bookings,
+    ISlotRepository slots,
+    IUnitOfWork unitOfWork)
 {
-    public async Task<Result> Execute(CancelBookingCommand command)
+    public async Task<Result> Execute(CancelBookingCommand command, CancellationToken cancellationToken = default)
     {
-        var booking = await bookings.GetById(command.BookingId);
+        var booking = await bookings.GetById(command.BookingId, cancellationToken);
 
         if (booking is null)
         {
@@ -20,11 +23,11 @@ public sealed class CancelBooking(IBookingRepository bookings, ISlotRepository s
         {
             booking.Cancel();
             
-            var slot = await slots.Get(booking.SlotId);
+            var slot = await slots.Get(booking.SlotId, cancellationToken);
             if (slot != null)
             {
                 slot.MarkAsAvailable();
-                await slots.Update(slot);
+                await slots.Update(slot, cancellationToken);
             }
         }
         catch (InvalidOperationException e)
@@ -32,7 +35,8 @@ public sealed class CancelBooking(IBookingRepository bookings, ISlotRepository s
             return Result.Failure(e.Message);
         }
 
-        await bookings.Update(booking);
+        await bookings.Update(booking, cancellationToken);
+        await unitOfWork.Commit(cancellationToken);
 
         return Result.Success();
     }

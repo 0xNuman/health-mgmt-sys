@@ -6,31 +6,30 @@ namespace Scheduling.Infrastructure.Repositories;
 
 public sealed class AvailabilityExceptionRepository(SchedulingDbContext db) : IAvailabilityExceptionRepository
 {
-    public async Task<AvailabilityException?> Get(Guid doctorId, DateOnly date) =>
-        await db.AvailabilityExceptions.SingleOrDefaultAsync(a => a.DoctorId == doctorId && a.Date == date);
+    public async Task<AvailabilityException?> Get(Guid doctorId, DateOnly date, CancellationToken cancellationToken = default) =>
+        await db.AvailabilityExceptions.SingleOrDefaultAsync(a => a.DoctorId == doctorId && a.Date == date, cancellationToken);
 
-    public async Task<IReadOnlyList<AvailabilityException>> GetInRange(Guid doctorId, DateOnly from, DateOnly to)
+    public async Task<IReadOnlyList<AvailabilityException>> GetInRange(Guid doctorId, DateOnly from, DateOnly to, CancellationToken cancellationToken = default)
         => await db.AvailabilityExceptions.Where(a =>
                 a.DoctorId == doctorId &&
                 a.Date >= from &&
                 a.Date <= to)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
 
-    public async Task Add(AvailabilityException exception)
+    public Task Add(AvailabilityException exception, CancellationToken cancellationToken = default)
     {
         db.AvailabilityExceptions.Add(exception);
-        await db.SaveChangesAsync();
+        return Task.CompletedTask;
     }
 
-    public async Task Delete(Guid doctorId, DateOnly date)
+    public async Task Delete(Guid doctorId, DateOnly date, CancellationToken cancellationToken = default)
     {
-        var entity = await Get(doctorId, date);
+        var entity = await Get(doctorId, date, cancellationToken);
         if (entity is null)
         {
             return;
         }
 
         db.AvailabilityExceptions.Remove(entity);
-        await db.SaveChangesAsync();
     }
 }

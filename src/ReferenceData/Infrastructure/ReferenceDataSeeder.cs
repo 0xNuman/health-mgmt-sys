@@ -15,33 +15,63 @@ public sealed class ReferenceDataSeeder(ReferenceDataDbContext db)
             return;
         }
 
-        var doctor = new Doctor
+        var doctors = new[]
         {
-            Id = Guid.NewGuid(),
-            FullName = "Dr. Anand Nagrani",
-            Specialty = "Orthopaedic Surgeon",
-            IsActive = true
+            new Doctor
+            {
+                Id = Guid.NewGuid(),
+                FullName = "Dr. Thor",
+                Specialty = "Neuro Surgeon",
+                IsActive = true
+            },
+            new Doctor
+            {
+                Id = Guid.NewGuid(),
+                FullName = "Dr. Steve Rogers",
+                Specialty = "Orthopaedic Surgeon",
+                IsActive = true
+            }
         };
 
-        var patient = new Patient
+        var patients = new[]
         {
-            Id = Guid.NewGuid(),
-            FullName = "Ved Prakash",
-            Phone = "9000000000",
-            Email = "ved.prakash@udayclinics.com"
+            new Patient
+            {
+                Id = Guid.NewGuid(),
+                FullName = "Bruce Banner",
+                Phone = "9000000000",
+                Email = "hulk@marvel.com"
+            },
+            new Patient
+            {
+                Id = Guid.NewGuid(),
+                FullName = "Tony Stark",
+                Phone = "8000000000",
+                Email = "tony@marvel.com"
+            }
         };
 
-        var doctorAvailability = new DoctorAvailability(doctor.Id,
-            new HashSet<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Wednesday },
-            new TimeOnly(10, 0),
-            new TimeOnly(11, 0),
-            15,
-            7,
-            true);
+        var doctorAvailabilities = new[]
+        {
+            new DoctorAvailability(doctors[0].Id,
+                new HashSet<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Wednesday },
+                new TimeOnly(10, 0),
+                new TimeOnly(11, 0),
+                10,
+                14,
+                true),
+            new DoctorAvailability(doctors[1].Id,
+                new HashSet<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Wednesday },
+                new TimeOnly(10, 0),
+                new TimeOnly(11, 0),
+                10,
+                7,
+                true)
+        };
 
-        await db.Doctors.AddAsync(doctor);
-        await db.Patients.AddAsync(patient);
-        await db.DoctorAvailabilities.AddAsync(doctorAvailability);
+        await db.Doctors.AddRangeAsync(doctors);
+        await db.Patients.AddRangeAsync(patients);
+        await db.DoctorAvailabilities.AddRangeAsync(doctorAvailabilities);
         await db.SaveChangesAsync();
     }
 }
