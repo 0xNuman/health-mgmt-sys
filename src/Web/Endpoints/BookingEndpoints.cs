@@ -26,7 +26,7 @@ public static class BookingEndpoints
         // TODO: Shall we consider strongly typed Ids like DoctorId and SlotId?
         var command = new BookSlotCommand(
             slotId,
-            Guid.NewGuid()
+            request.PatientId
         );
         
         var result = await useCase.Execute(command);
