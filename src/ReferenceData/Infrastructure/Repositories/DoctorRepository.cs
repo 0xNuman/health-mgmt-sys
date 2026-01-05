@@ -12,6 +12,9 @@ public sealed class DoctorRepository(ReferenceDataDbContext db) : IDoctorReposit
     public async Task<IReadOnlyList<Doctor>> GetAllActive()
         => await db.Doctors.Where(d => d.IsActive).ToListAsync();
 
+    public async Task<IReadOnlyList<Doctor>> GetByIds(IEnumerable<Guid> ids)
+        => await db.Doctors.Where(d => ids.Contains(d.Id)).ToListAsync();
+
     public async Task Add(Doctor doctor)
     {
         db.Doctors.Add(doctor);

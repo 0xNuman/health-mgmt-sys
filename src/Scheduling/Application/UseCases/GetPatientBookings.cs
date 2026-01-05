@@ -5,8 +5,10 @@ namespace Scheduling.Application.UseCases;
 public sealed record PatientBookingDto(
     Guid BookingId,
     Guid SlotId,
+    Guid DoctorId,
     string Date,
-    string Time,
+    string StartTime,
+    string EndTime,
     string Status
 );
 
@@ -26,8 +28,10 @@ public sealed class GetPatientBookings(IBookingRepository bookings, ISlotReposit
                 results.Add(new PatientBookingDto(
                     b.Id,
                     b.SlotId,
+                    slot.DoctorId,
                     slot.Date.ToString("yyyy-MM-dd"),
-                    $"{slot.StartTime:HH:mm} - {slot.EndTime:HH:mm}",
+                    slot.StartTime.ToString("HH:mm"),
+                    slot.EndTime.ToString("HH:mm"),
                     b.Status.ToString()
                 ));
             }

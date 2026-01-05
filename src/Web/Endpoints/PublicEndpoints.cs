@@ -1,4 +1,5 @@
 using Scheduling.Application.UseCases;
+using Web.Services;
 
 namespace Web.Endpoints;
 
@@ -27,9 +28,9 @@ public static class PublicEndpoints
         // 3. Get Patient's Bookings
         app.MapGet("/api/patients/{patientId:guid}/bookings", async (
             Guid patientId,
-            GetPatientBookings useCase) =>
+            PatientBookingsOrchestrator orchestrator) =>
         {
-            var bookings = await useCase.Execute(patientId);
+            var bookings = await orchestrator.GetCompositeBookings(patientId);
             return Results.Ok(bookings);
         });
 
@@ -43,6 +44,7 @@ public static class PublicEndpoints
             {
                 return Results.NotFound(new { message = "Patient not found" });
             }
+
             return Results.Ok(patient);
         });
 

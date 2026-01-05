@@ -21,6 +21,8 @@ builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddOpenApi();
 
 builder.Services.AddHostedService<SlotGenerationWorker>();
+builder.Services.AddScoped<Web.Services.PatientBookingsOrchestrator>();
+
 
 var app = builder.Build();
 
